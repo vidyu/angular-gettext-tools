@@ -1,7 +1,7 @@
 {
   "name": "angular-gettext-tools",
   "description": "Tools for extracting/compiling angular-gettext strings.",
-  "version": "2.1.11",
+  "version": "2.3.3",
   "homepage": "http://angular-gettext.rocketeer.be/",
   "author": {
     "name": "Ruben Vermeersch",
@@ -30,17 +30,18 @@
     "grunt-contrib-jshint": "~0.11.2",
     "grunt-contrib-watch": "~0.6.1",
     "grunt-jscs": "^1.8.0",
-    "grunt-mocha-cli": "^1.13.1"
+    "grunt-mocha-cli": "^1.13.1",
+    "sinon": "^1.17.4"
   },
   "keywords": [
     "angular",
     "gettext"
   ],
   "dependencies": {
+    "babylon": "^6.11.4",
     "binary-search": "^1.2.0",
     "cheerio": "~0.19.0",
-    "espree": "^2.0.0",
-    "lodash": "^3.10.0",
+    "lodash": "^4.0.0",
     "pofile": "~1.0.0"
   }
 }

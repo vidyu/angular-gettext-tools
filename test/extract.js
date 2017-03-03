@@ -130,10 +130,16 @@ describe('Extract', function () {
         ];
         var catalog = testExtract(files);
 
-        assert.equal(catalog.items.length, 3);
+        assert.equal(catalog.items.length, 6);
         assert.equal(catalog.items[0].msgid, 'a');
         assert.equal(catalog.items[1].msgid, 'b');
         assert.equal(catalog.items[2].msgid, 'c');
+        assert.equal(catalog.items[3].msgid, 'd');
+        assert.equal(catalog.items[3].msgctxt, null);
+        assert.equal(catalog.items[4].msgid, 'd');
+        assert.equal(catalog.items[4].msgctxt, 'a');
+        assert.equal(catalog.items[5].msgid, 'd');
+        assert.equal(catalog.items[5].msgctxt, 'b');
     });
 
     it('Extracts strings concatenation from JavaScript source', function () {
@@ -343,6 +349,33 @@ describe('Extract', function () {
         assert.equal(catalog.items[1].msgctxt, 'male');
     });
 
+    it('Should extract context of custom element attribute from HTM, including attribute as element', function () {
+        var files = [
+            'test/fixtures/context-custom.html'
+        ];
+        var catalog = testExtract(files, {
+            attribute: 'trans'
+        });
+
+        assert.equal(catalog.items.length, 4);
+
+        assert.equal(catalog.items[0].msgid, 'CrazyMe!');
+        assert.equal(catalog.items[0].msgstr, '');
+        assert.equal(catalog.items[0].msgctxt, 'male');
+
+        assert.equal(catalog.items[1].msgid, 'CrazyYou!');
+        assert.equal(catalog.items[1].msgstr, '');
+        assert.strictEqual(catalog.items[1].msgctxt, null);
+
+        assert.equal(catalog.items[2].msgid, 'Hello1!');
+        assert.equal(catalog.items[2].msgstr, '');
+        assert.strictEqual(catalog.items[2].msgctxt, null);
+
+        assert.equal(catalog.items[3].msgid, 'Hello2!');
+        assert.equal(catalog.items[3].msgstr, '');
+        assert.equal(catalog.items[3].msgctxt, 'male');
+    });
+
     it('Extracts strings from an ES6 class', function () {
         var files = [
             'test/fixtures/es6-class.js'
@@ -352,7 +385,7 @@ describe('Extract', function () {
         assert.equal(catalog.items.length, 1);
         assert.equal(catalog.items[0].msgid, 'Hi from an ES6 class!');
         assert.equal(catalog.items[0].msgstr, '');
-        assert.deepEqual(catalog.items[0].references, ['test/fixtures/es6-class.js:3']);
+        assert.deepEqual(catalog.items[0].references, ['test/fixtures/es6-class.js:5']);
     });
 
     it('Should extract custom attributes from HTML', function () {
@@ -370,5 +403,35 @@ describe('Extract', function () {
 
         assert.equal(catalog.items[1].msgid, 'Hello!');
         assert.equal(catalog.items[1].msgstr, '');
+    });
+
+    it('Extracts strings from an ES6 export', function () {
+        var files = [
+            'test/fixtures/es6-export.js'
+        ];
+        var catalog = testExtract(files);
+
+        assert.equal(catalog.items.length, 2);
+
+        assert.equal(catalog.items[0].msgid, 'Hi from an ES6 export default!');
+        assert.equal(catalog.items[0].msgstr, '');
+        assert.deepEqual(catalog.items[0].references, ['test/fixtures/es6-export.js:6']);
+
+        assert.equal(catalog.items[1].msgid, 'Hi from an ES6 export!');
+        assert.equal(catalog.items[1].msgstr, '');
+        assert.deepEqual(catalog.items[1].references, ['test/fixtures/es6-export.js:2']);
+    });
+
+    it('Extracts strings from an ES6 import', function () {
+        var files = [
+            'test/fixtures/es6-import.js'
+        ];
+        var catalog = testExtract(files);
+
+        assert.equal(catalog.items.length, 1);
+
+        assert.equal(catalog.items[0].msgid, 'Hi from ES6 file with import!');
+        assert.equal(catalog.items[0].msgstr, '');
+        assert.deepEqual(catalog.items[0].references, ['test/fixtures/es6-import.js:5']);
     });
 });
